@@ -10,7 +10,7 @@ RUN apt-get update \
            libavformat-dev libxine1-ffmpeg libxine-dev libxine1-bin \
            libunicap2 libunicap2-dev swig libv4l-0 libv4l-dev \
            python-numpy libpython2.6 python-dev python2.6-dev libgtk2.0-dev \
-           wget unzip
+           wget unzip ssh openssh-server
 
 RUN cd /opt \
      && wget https://github.com/Itseez/opencv/archive/3.0.0.zip \
@@ -23,6 +23,16 @@ RUN cd /opt \
      && make install \
      && ldconfig
 
-CMD ["service ssh start"]
+RUN mkdir /var/run/sshd \
+    && echo 'root:root' | chpasswd \
+    && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/ss$
+    && echo "export VISIBLE=now" >> /etc/profile
+
+# SSH login fix. Otherwise user is kicked off after login
+#RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g$
+
+ENV NOTVISIBLE "in users profile"
+
+CMD ["/usr/sbin/sshd", "-D"]
 
 EXPOSE 22
