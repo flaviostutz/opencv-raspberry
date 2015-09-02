@@ -22,6 +22,8 @@ RUN cd /opt \
      && make -j4 \
      && make install \
      && ldconfig
+     && rm /opt/3.0.0.zip
+     && rm -R /opt/opencv-3.0.0
 
 RUN mkdir /var/run/sshd \
     && echo 'root:root' | chpasswd \
