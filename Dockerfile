@@ -27,7 +27,7 @@ RUN cd /opt \
 
 RUN mkdir /var/run/sshd \
     && echo 'root:root' | chpasswd \
-    && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/ss$
+    && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
     && echo "export VISIBLE=now" >> /etc/profile
 
 # SSH login fix. Otherwise user is kicked off after login
